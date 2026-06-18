@@ -1,0 +1,1071 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --pink:#ec4899;--pink-dark:#be185d;--pink-light:#fdf2f8;--pink-mid:#f9a8d4;
+  --bg:#fff;--bg2:#fdf2f8;--bg3:#f8f0f5;--text:#1a0a10;--text2:#6b4d5a;--text3:#9d7a8a;
+  --border:#f3e0ea;--card:#fff;--shadow:0 4px 24px rgba(236,72,153,.1);--shadow2:0 8px 40px rgba(236,72,153,.18);
+  --nav-bg:rgba(255,255,255,.92);
+}
+.dark{
+  --bg:#0f0a0d;--bg2:#1a0d15;--bg3:#200f18;--text:#f9f0f4;--text2:#d4b8c4;--text3:#9d7a8a;
+  --border:#2d1a24;--card:#1e0f18;--shadow:0 4px 24px rgba(0,0,0,.4);--shadow2:0 8px 40px rgba(0,0,0,.5);
+  --nav-bg:rgba(15,10,13,.92);
+}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);transition:background .3s,color .3s;min-height:100vh}
+h1,h2,h3,h4{font-family:'Playfair Display',Georgia,serif}
+.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+
+/* NAV */
+nav{position:sticky;top:0;z-index:100;background:var(--nav-bg);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);padding:0 24px}
+.nav-inner{max-width:1100px;margin:0 auto;height:60px;display:flex;align-items:center;justify-content:space-between;gap:16px}
+.logo{display:flex;align-items:center;gap:8px;cursor:pointer;flex-shrink:0}
+.logo-circle{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#f472b6,#ec4899);display:flex;align-items:center;justify-content:center;color:#fff;font-family:'Playfair Display',serif;font-weight:700;font-size:18px}
+.logo-text{font-family:'Playfair Display',serif;font-weight:700;font-size:20px;background:linear-gradient(135deg,#ec4899,#be185d);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.nav-links{display:flex;align-items:center;gap:4px}
+.nav-link{padding:6px 12px;border-radius:20px;font-size:13px;font-weight:500;color:var(--text2);cursor:pointer;border:none;background:none;transition:all .2s}
+.nav-link:hover,.nav-link.active{color:var(--pink);background:var(--pink-light)}
+.nav-actions{display:flex;align-items:center;gap:4px}
+.icon-btn{width:36px;height:36px;border-radius:50%;border:none;background:none;color:var(--text2);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:16px;transition:all .2s;position:relative}
+.icon-btn:hover{background:var(--pink-light);color:var(--pink)}
+.cart-badge{position:absolute;top:2px;right:2px;width:16px;height:16px;background:var(--pink);color:#fff;border-radius:50%;font-size:9px;font-weight:700;display:flex;align-items:center;justify-content:center}
+
+/* PAGES */
+.page{display:none;min-height:60vh}
+.page.active{display:block}
+
+/* HERO */
+.hero{background:linear-gradient(135deg,var(--bg2) 0%,var(--bg) 60%);padding:60px 24px}
+.hero-inner{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center}
+.hero-badge{display:inline-flex;align-items:center;gap:6px;background:var(--card);border:1px solid var(--border);border-radius:20px;padding:6px 14px;font-size:12px;font-weight:500;color:var(--pink);margin-bottom:20px}
+.hero h1{font-size:clamp(32px,5vw,52px);line-height:1.1;color:var(--text);margin-bottom:16px}
+.hero h1 span{font-style:italic;background:linear-gradient(135deg,#ec4899,#be185d);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.hero p{font-size:16px;color:var(--text2);line-height:1.7;margin-bottom:28px;max-width:480px}
+.hero-btns{display:flex;gap:12px;flex-wrap:wrap}
+.btn-primary{background:linear-gradient(135deg,#ec4899,#be185d);color:#fff;border:none;padding:12px 24px;border-radius:24px;font-size:14px;font-weight:600;cursor:pointer;transition:all .3s;box-shadow:0 4px 20px rgba(236,72,153,.35)}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 6px 28px rgba(236,72,153,.5)}
+.btn-secondary{background:transparent;color:var(--pink);border:2px solid var(--pink);padding:11px 24px;border-radius:24px;font-size:14px;font-weight:600;cursor:pointer;transition:all .3s}
+.btn-secondary:hover{background:var(--pink);color:#fff;transform:translateY(-2px)}
+.hero-img-wrap{position:relative}
+.hero-img{width:100%;aspect-ratio:1;border-radius:32px;object-fit:cover;background:linear-gradient(135deg,#f9a8d4 0%,#ec4899 50%,#be185d 100%);display:flex;align-items:center;justify-content:center;font-size:80px;overflow:hidden}
+.hero-float{position:absolute;bottom:-20px;left:-20px;background:var(--card);border:1px solid var(--border);border-radius:16px;padding:12px 16px;box-shadow:var(--shadow2);display:flex;align-items:center;gap:10px}
+.hero-float-icon{width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,#f9a8d4,#ec4899);display:flex;align-items:center;justify-content:center;font-size:18px}
+.hero-stats{display:flex;gap:28px;margin-top:32px}
+.stat{text-align:center}
+.stat-val{font-family:'Playfair Display',serif;font-size:24px;font-weight:700;color:var(--text)}
+.stat-label{font-size:12px;color:var(--text3)}
+.stat-divider{width:1px;background:var(--border)}
+
+/* SECTION */
+.section{padding:60px 24px}
+.section-inner{max-width:1100px;margin:0 auto}
+.section-header{text-align:center;margin-bottom:40px}
+.section-badge{display:inline-block;background:var(--pink-light);color:var(--pink);border-radius:20px;padding:4px 12px;font-size:12px;font-weight:600;margin-bottom:8px}
+.section-title{font-size:clamp(24px,4vw,36px);color:var(--text);margin-bottom:8px}
+.section-sub{font-size:15px;color:var(--text2)}
+.section-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:32px;flex-wrap:wrap;gap:12px}
+.view-all{color:var(--pink);font-size:13px;font-weight:600;cursor:pointer;border:none;background:none;display:flex;align-items:center;gap:4px;transition:gap .2s}
+.view-all:hover{gap:8px}
+
+/* CATEGORIES */
+.cats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:12px}
+.cat-card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:16px 8px;text-align:center;cursor:pointer;transition:all .25s}
+.cat-card:hover{transform:translateY(-4px);border-color:var(--pink);box-shadow:var(--shadow)}
+.cat-icon{font-size:28px;margin-bottom:8px}
+.cat-name{font-size:12px;font-weight:500;color:var(--text)}
+.cat-count{font-size:11px;color:var(--text3)}
+
+/* PRODUCTS GRID */
+.products-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:20px}
+.product-card{background:var(--card);border:1px solid var(--border);border-radius:20px;overflow:hidden;cursor:pointer;transition:all .3s}
+.product-card:hover{transform:translateY(-4px);box-shadow:var(--shadow2);border-color:var(--pink-mid)}
+.product-img{width:100%;aspect-ratio:1;background:var(--bg2);display:flex;align-items:center;justify-content:center;font-size:56px;position:relative;overflow:hidden}
+.product-img img{width:100%;height:100%;object-fit:cover}
+.product-badges{position:absolute;top:8px;left:8px;display:flex;flex-direction:column;gap:4px}
+.badge-off{background:#ec4899;color:#fff;border-radius:10px;padding:2px 8px;font-size:10px;font-weight:700}
+.badge-new{background:#22c55e;color:#fff;border-radius:10px;padding:2px 8px;font-size:10px;font-weight:700}
+.wish-btn{position:absolute;top:8px;right:8px;width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,.85);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:15px;transition:all .2s}
+.wish-btn:hover{background:#fff;transform:scale(1.15)}
+.wish-btn.wished{color:#ec4899}
+.product-info{padding:12px}
+.product-brand{font-size:10px;color:var(--pink);font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin-bottom:2px}
+.product-name{font-size:13px;font-weight:500;color:var(--text);line-height:1.4;margin-bottom:6px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.product-stars{display:flex;align-items:center;gap:3px;margin-bottom:6px}
+.stars{color:#f59e0b;font-size:11px}
+.stars-count{font-size:10px;color:var(--text3)}
+.product-price{display:flex;align-items:baseline;gap:6px}
+.price-now{font-size:16px;font-weight:700;color:var(--text)}
+.price-old{font-size:12px;color:var(--text3);text-decoration:line-through}
+.add-btn{width:100%;margin-top:8px;background:linear-gradient(135deg,#ec4899,#be185d);color:#fff;border:none;border-radius:12px;padding:9px;font-size:12px;font-weight:600;cursor:pointer;transition:all .2s}
+.add-btn:hover{opacity:.9;transform:scale(1.02)}
+
+/* SHOP PAGE */
+.shop-layout{display:grid;grid-template-columns:240px 1fr;gap:28px;max-width:1100px;margin:0 auto;padding:32px 24px}
+.shop-sidebar{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:20px;height:fit-content;position:sticky;top:76px}
+.filter-title{font-size:15px;font-weight:600;color:var(--text);margin-bottom:16px}
+.filter-section{margin-bottom:20px}
+.filter-label{font-size:12px;font-weight:600;color:var(--text2);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px}
+.filter-option{display:flex;align-items:center;gap:8px;padding:6px 0;cursor:pointer;font-size:13px;color:var(--text2);transition:color .2s}
+.filter-option:hover{color:var(--pink)}
+.filter-option input[type=radio],.filter-option input[type=checkbox]{accent-color:var(--pink)}
+.price-range{width:100%;accent-color:var(--pink)}
+.skin-type-pills{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.skin-pill{padding:4px 10px;border-radius:12px;font-size:11px;border:1px solid var(--border);cursor:pointer;color:var(--text2);transition:all .2s;background:none}
+.skin-pill:hover,.skin-pill.active{background:var(--pink);color:#fff;border-color:var(--pink)}
+.shop-main{}
+.shop-toolbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap;gap:12px}
+.shop-search{position:relative;flex:1;max-width:320px}
+.shop-search input{width:100%;padding:9px 12px 9px 36px;border:1px solid var(--border);border-radius:12px;background:var(--bg2);color:var(--text);font-size:13px;outline:none}
+.shop-search input:focus{border-color:var(--pink)}
+.shop-search-icon{position:absolute;left:10px;top:50%;transform:translateY(-50%);color:var(--text3);font-size:14px}
+.sort-select{padding:9px 12px;border:1px solid var(--border);border-radius:12px;background:var(--bg2);color:var(--text);font-size:13px;outline:none;cursor:pointer}
+.results-count{font-size:13px;color:var(--text2)}
+
+/* CART */
+.cart-page{max-width:900px;margin:0 auto;padding:32px 24px}
+.cart-grid{display:grid;grid-template-columns:1fr 340px;gap:24px}
+.cart-items{display:flex;flex-direction:column;gap:12px}
+.cart-item{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:16px;display:flex;gap:14px;align-items:center}
+.cart-item-img{width:72px;height:72px;border-radius:12px;background:var(--bg2);display:flex;align-items:center;justify-content:center;font-size:32px;flex-shrink:0}
+.cart-item-info{flex:1}
+.cart-item-name{font-size:13px;font-weight:500;color:var(--text);margin-bottom:2px}
+.cart-item-price{font-size:14px;font-weight:700;color:var(--pink)}
+.qty-ctrl{display:flex;align-items:center;gap:0;border:1px solid var(--border);border-radius:20px;overflow:hidden;width:fit-content;margin-top:8px}
+.qty-btn{width:30px;height:28px;border:none;background:none;cursor:pointer;color:var(--text2);font-size:16px;transition:all .2s}
+.qty-btn:hover{background:var(--pink-light);color:var(--pink)}
+.qty-num{width:32px;text-align:center;font-size:13px;font-weight:600;color:var(--text)}
+.remove-btn{background:none;border:none;color:var(--text3);cursor:pointer;font-size:17px;padding:4px;border-radius:8px;transition:color .2s}
+.remove-btn:hover{color:#ef4444}
+.order-summary{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:20px;height:fit-content;position:sticky;top:76px}
+.summary-title{font-size:16px;font-weight:600;color:var(--text);margin-bottom:16px}
+.summary-row{display:flex;justify-content:space-between;font-size:13px;color:var(--text2);margin-bottom:8px}
+.summary-divider{height:1px;background:var(--border);margin:12px 0}
+.summary-total{display:flex;justify-content:space-between;font-size:16px;font-weight:700;color:var(--text)}
+.coupon-row{display:flex;gap:8px;margin:12px 0}
+.coupon-input{flex:1;padding:8px 10px;border:1px solid var(--border);border-radius:10px;background:var(--bg2);color:var(--text);font-size:12px;outline:none}
+.coupon-btn{padding:8px 12px;background:var(--pink);color:#fff;border:none;border-radius:10px;font-size:12px;font-weight:600;cursor:pointer}
+.checkout-btn{width:100%;margin-top:16px;background:linear-gradient(135deg,#ec4899,#be185d);color:#fff;border:none;border-radius:16px;padding:14px;font-size:14px;font-weight:700;cursor:pointer;transition:all .3s;box-shadow:0 4px 20px rgba(236,72,153,.35)}
+.checkout-btn:hover{transform:translateY(-2px);box-shadow:0 6px 28px rgba(236,72,153,.5)}
+.empty-cart{text-align:center;padding:64px 24px}
+.empty-emoji{font-size:60px;margin-bottom:16px}
+
+/* PRODUCT DETAIL */
+.product-detail{max-width:1100px;margin:0 auto;padding:32px 24px}
+.pd-grid{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:start}
+.pd-img{aspect-ratio:1;border-radius:24px;background:var(--bg2);display:flex;align-items:center;justify-content:center;font-size:100px}
+.pd-brand{font-size:12px;color:var(--pink);font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px}
+.pd-name{font-size:28px;font-weight:700;color:var(--text);margin-bottom:12px;font-family:'Playfair Display',serif}
+.pd-stars{display:flex;align-items:center;gap:6px;margin-bottom:12px}
+.pd-price{margin-bottom:16px}
+.pd-price-now{font-size:28px;font-weight:700;color:var(--text)}
+.pd-price-old{font-size:16px;color:var(--text3);text-decoration:line-through;margin-left:8px}
+.pd-desc{font-size:14px;color:var(--text2);line-height:1.7;margin-bottom:20px}
+.pd-tags{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:20px}
+.pd-tag{background:var(--pink-light);color:var(--pink);border-radius:12px;padding:4px 10px;font-size:11px;font-weight:600}
+.pd-actions{display:flex;gap:10px;align-items:center;margin-bottom:20px}
+.qty-wrap{display:flex;align-items:center;border:2px solid var(--border);border-radius:20px;overflow:hidden}
+.pd-wish{width:48px;height:48px;border-radius:50%;border:2px solid var(--border);background:none;cursor:pointer;font-size:20px;display:flex;align-items:center;justify-content:center;transition:all .2s;flex-shrink:0}
+.pd-wish:hover{border-color:var(--pink)}
+.pd-wish.wished{color:var(--pink);border-color:var(--pink)}
+.trust-badges{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
+.trust-badge{background:var(--bg2);border-radius:12px;padding:10px;text-align:center;font-size:11px;color:var(--text2)}
+.trust-badge span{display:block;font-size:18px;margin-bottom:4px}
+
+/* TABS */
+.tabs{margin-top:16px}
+.tab-list{display:flex;border-bottom:1px solid var(--border);gap:0;overflow-x:auto}
+.tab-btn{padding:10px 16px;border:none;background:none;font-size:13px;font-weight:500;color:var(--text2);cursor:pointer;border-bottom:2px solid transparent;transition:all .2s;white-space:nowrap}
+.tab-btn.active{color:var(--pink);border-bottom-color:var(--pink)}
+.tab-panel{padding:20px 0;display:none}
+.tab-panel.active{display:block}
+.ingredients-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.ing-item{display:flex;align-items:center;gap:8px;background:var(--bg2);border-radius:10px;padding:8px 12px;font-size:12px;color:var(--text2)}
+.ing-dot{width:6px;height:6px;border-radius:50%;background:var(--pink);flex-shrink:0}
+.benefits-list{display:flex;flex-direction:column;gap:8px}
+.benefit-item{display:flex;align-items:center;gap:10px;background:var(--bg2);border-radius:10px;padding:10px 12px;font-size:13px;color:var(--text2)}
+.benefit-check{color:#22c55e;font-size:14px}
+
+/* CHATBOT */
+.chatbot-btn{position:fixed;bottom:24px;right:24px;width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,#ec4899,#be185d);border:none;cursor:pointer;box-shadow:0 4px 24px rgba(236,72,153,.45);display:flex;align-items:center;justify-content:center;font-size:24px;z-index:200;transition:all .3s;color:#fff}
+.chatbot-btn:hover{transform:scale(1.1)}
+.chatbot-window{position:fixed;bottom:90px;right:24px;width:340px;height:480px;background:var(--card);border:1px solid var(--border);border-radius:24px;box-shadow:var(--shadow2);z-index:200;display:flex;flex-direction:column;overflow:hidden;transform-origin:bottom right;transition:all .3s}
+.chatbot-window.hidden{transform:scale(0.8);opacity:0;pointer-events:none}
+.chat-header{background:linear-gradient(135deg,#ec4899,#be185d);padding:14px 16px;display:flex;align-items:center;gap:10px}
+.chat-avatar{width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,.25);display:flex;align-items:center;justify-content:center;font-size:18px}
+.chat-header-info{}
+.chat-title{font-size:14px;font-weight:600;color:#fff}
+.chat-status{font-size:11px;color:rgba(255,255,255,.8)}
+.chat-messages{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:10px}
+.chat-messages::-webkit-scrollbar{width:3px}
+.chat-messages::-webkit-scrollbar-thumb{background:var(--pink-mid);border-radius:10px}
+.msg{max-width:85%;border-radius:16px;padding:8px 12px;font-size:13px;line-height:1.5}
+.msg.bot{background:var(--bg2);color:var(--text);border-bottom-left-radius:4px;align-self:flex-start}
+.msg.user{background:linear-gradient(135deg,#ec4899,#be185d);color:#fff;border-bottom-right-radius:4px;align-self:flex-end}
+.chat-suggestions{display:flex;flex-wrap:wrap;gap:6px;padding:0 16px 8px}
+.chat-sug{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:5px 10px;font-size:11px;color:var(--text2);cursor:pointer;transition:all .2s}
+.chat-sug:hover{border-color:var(--pink);color:var(--pink)}
+.chat-input-row{padding:10px;border-top:1px solid var(--border);display:flex;gap:8px}
+.chat-input{flex:1;padding:8px 12px;border:1px solid var(--border);border-radius:16px;background:var(--bg2);color:var(--text);font-size:13px;outline:none}
+.chat-input:focus{border-color:var(--pink)}
+.chat-send{width:36px;height:36px;border-radius:50%;background:var(--pink);border:none;color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:15px;transition:all .2s;flex-shrink:0}
+.chat-send:hover{background:var(--pink-dark)}
+
+/* SKIN QUIZ */
+.quiz-wrap{max-width:600px;margin:0 auto;padding:40px 24px}
+.quiz-progress{height:6px;background:var(--border);border-radius:3px;margin-bottom:32px;overflow:hidden}
+.quiz-bar{height:100%;background:linear-gradient(90deg,#ec4899,#be185d);border-radius:3px;transition:width .4s}
+.quiz-q{font-size:22px;font-weight:600;color:var(--text);margin-bottom:24px;font-family:'Playfair Display',serif}
+.quiz-options{display:flex;flex-direction:column;gap:10px}
+.quiz-option{background:var(--card);border:2px solid var(--border);border-radius:16px;padding:14px 18px;cursor:pointer;display:flex;align-items:center;gap:12px;transition:all .2s;text-align:left}
+.quiz-option:hover{border-color:var(--pink-mid);transform:translateX(4px)}
+.quiz-option.selected{border-color:var(--pink);background:var(--pink-light)}
+.quiz-emoji{font-size:22px}
+.quiz-label{font-size:14px;font-weight:500;color:var(--text)}
+.quiz-result{text-align:center;padding:20px 0}
+.quiz-result-emoji{font-size:60px;margin-bottom:16px}
+.quiz-result h2{font-size:26px;color:var(--text);margin-bottom:8px}
+.quiz-type-badge{display:inline-block;background:var(--pink-light);color:var(--pink);border-radius:20px;padding:6px 16px;font-size:14px;font-weight:600;margin-bottom:16px}
+.quiz-routine{background:var(--bg2);border-radius:16px;padding:20px;margin:16px 0;text-align:left}
+.quiz-routine h4{font-size:14px;font-weight:600;color:var(--text);margin-bottom:12px}
+.routine-step{display:flex;align-items:center;gap:10px;margin-bottom:8px;font-size:13px;color:var(--text2)}
+.step-num{width:24px;height:24px;border-radius:50%;background:var(--pink);color:#fff;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+
+/* TESTIMONIALS */
+.testi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:20px}
+.testi-card{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:20px}
+.testi-quote{font-size:28px;color:var(--pink-mid);margin-bottom:10px}
+.testi-text{font-size:13px;color:var(--text2);line-height:1.6;margin-bottom:16px}
+.testi-author{display:flex;align-items:center;gap:10px}
+.testi-avatar{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#f9a8d4,#ec4899);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:600;font-size:13px;flex-shrink:0}
+.testi-name{font-size:13px;font-weight:600;color:var(--text)}
+.testi-role{font-size:11px;color:var(--text3)}
+
+/* AI BANNER */
+.ai-banner{background:linear-gradient(135deg,#ec4899,#9d174d);border-radius:24px;padding:40px;margin:0 24px 60px;position:relative;overflow:hidden}
+.ai-banner::before{content:'';position:absolute;top:-40px;right:-40px;width:180px;height:180px;background:rgba(255,255,255,.08);border-radius:50%}
+.ai-banner-inner{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:center;position:relative}
+.ai-banner h2{font-size:28px;color:#fff;margin-bottom:12px}
+.ai-banner p{font-size:14px;color:rgba(255,255,255,.85);line-height:1.7;margin-bottom:20px}
+.ai-feature{display:flex;align-items:flex-start;gap:12px;background:rgba(255,255,255,.1);border-radius:14px;padding:14px;margin-bottom:10px}
+.ai-feature-icon{width:40px;height:40px;border-radius:10px;background:rgba(255,255,255,.2);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.ai-feature-text h4{font-size:13px;color:#fff;font-weight:600;margin-bottom:2px}
+.ai-feature-text p{font-size:12px;color:rgba(255,255,255,.75)}
+
+/* FOOTER */
+footer{background:#111;color:#ccc;padding:48px 24px 24px}
+.footer-inner{max-width:1100px;margin:0 auto}
+.footer-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:40px;margin-bottom:40px}
+.footer-logo{display:flex;align-items:center;gap:8px;margin-bottom:12px}
+.footer-logo-circle{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,#f472b6,#ec4899);display:flex;align-items:center;justify-content:center;color:#fff;font-family:'Playfair Display',serif;font-weight:700;font-size:16px}
+.footer-brand{font-family:'Playfair Display',serif;font-weight:700;font-size:18px;color:#fff}
+.footer-desc{font-size:13px;color:#888;line-height:1.6;margin-bottom:16px;max-width:280px}
+.footer-socials{display:flex;gap:8px}
+.social-btn{width:32px;height:32px;border-radius:50%;background:#222;display:flex;align-items:center;justify-content:center;font-size:14px;color:#888;cursor:pointer;transition:all .2s}
+.social-btn:hover{background:var(--pink);color:#fff}
+.footer-col h4{font-size:13px;font-weight:600;color:#fff;margin-bottom:14px}
+.footer-links{display:flex;flex-direction:column;gap:8px}
+.footer-link{font-size:13px;color:#888;cursor:pointer;transition:color .2s}
+.footer-link:hover{color:#ec4899}
+.footer-bottom{border-top:1px solid #222;padding-top:20px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px}
+.footer-copy{font-size:12px;color:#555}
+
+/* ANNOUNCE BANNER */
+.announce{background:linear-gradient(90deg,#ec4899,#be185d,#ec4899);background-size:200% 100%;animation:slide-bg 4s linear infinite;padding:8px 24px;text-align:center;font-size:12px;font-weight:500;color:#fff;position:relative}
+@keyframes slide-bg{0%{background-position:0% 0}100%{background-position:200% 0}}
+.announce-close{position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;color:#fff;cursor:pointer;font-size:16px;opacity:.8}
+.announce-close:hover{opacity:1}
+
+/* TOAST */
+.toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%);background:#1a0a10;color:#fff;padding:10px 20px;border-radius:24px;font-size:13px;font-weight:500;z-index:300;opacity:0;transition:opacity .3s;pointer-events:none;white-space:nowrap;border:1px solid var(--pink)}
+.toast.show{opacity:1}
+
+/* NOTIFICATION DOT */
+.notif-dot{width:8px;height:8px;background:var(--pink);border-radius:50%;position:absolute;top:4px;right:4px}
+
+/* RESPONSIVE */
+@media(max-width:768px){
+  .hero-inner{grid-template-columns:1fr}
+  .hero-img-wrap{display:none}
+  .shop-layout{grid-template-columns:1fr}
+  .shop-sidebar{display:none}
+  .cart-grid{grid-template-columns:1fr}
+  .pd-grid{grid-template-columns:1fr}
+  .footer-grid{grid-template-columns:1fr 1fr}
+  .ai-banner-inner{grid-template-columns:1fr}
+}
+@media(max-width:480px){
+  .nav-links{display:none}
+  .footer-grid{grid-template-columns:1fr}
+}
+</style>
+
+<h2 class="sr-only">GlowAI — Premium AI-Powered Cosmetic E-Commerce Website with Shop, Cart, Skin Quiz, and AI Beauty Assistant</h2>
+
+<!-- ANNOUNCE BANNER -->
+<div class="announce" id="announce">
+  🌸 Free shipping on orders above ₹999 &nbsp;|&nbsp; Use code <strong>GLOW10</strong> for 10% off!
+  <button class="announce-close" onclick="document.getElementById('announce').style.display='none'">✕</button>
+</div>
+
+<!-- NAVBAR -->
+<nav>
+  <div class="nav-inner">
+    <div class="logo" onclick="goTo('home')">
+      <div class="logo-circle">G</div>
+      <span class="logo-text">GlowAI</span>
+    </div>
+    <div class="nav-links">
+      <button class="nav-link active" id="nav-home" onclick="goTo('home')">Home</button>
+      <button class="nav-link" id="nav-shop" onclick="goTo('shop')">Shop</button>
+      <button class="nav-link" id="nav-quiz" onclick="goTo('quiz')">Skin Quiz</button>
+      <button class="nav-link" id="nav-about" onclick="goTo('about')">About</button>
+    </div>
+    <div class="nav-actions">
+      <button class="icon-btn" onclick="toggleTheme()" title="Toggle dark mode">🌙</button>
+      <button class="icon-btn" onclick="goTo('shop')" title="Search">🔍</button>
+      <button class="icon-btn" id="wishlist-nav" title="Wishlist">❤️</button>
+      <button class="icon-btn" onclick="goTo('cart')" title="Cart">
+        🛍️
+        <span class="cart-badge" id="cart-badge" style="display:none">0</span>
+      </button>
+      <button class="icon-btn" title="Account" onclick="showToast('Demo mode — login not required!')">👤</button>
+    </div>
+  </div>
+</nav>
+
+<!-- ====== HOME PAGE ====== -->
+<div class="page active" id="page-home">
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-inner">
+      <div>
+        <div class="hero-badge">✨ AI-Powered Beauty Recommendations</div>
+        <h1>Discover Your <span>Perfect Glow</span> with AI</h1>
+        <p>Premium skincare curated by intelligent AI to match your unique skin type, concerns, and goals. Radiance starts here.</p>
+        <div class="hero-btns">
+          <button class="btn-primary" onclick="goTo('shop')">Shop Now →</button>
+          <button class="btn-secondary" onclick="goTo('quiz')">✨ Take Skin Quiz</button>
+        </div>
+        <div class="hero-stats">
+          <div class="stat"><div class="stat-val">50K+</div><div class="stat-label">Happy Customers</div></div>
+          <div class="stat-divider"></div>
+          <div class="stat"><div class="stat-val">4.8 ⭐</div><div class="stat-label">Avg Rating</div></div>
+          <div class="stat-divider"></div>
+          <div class="stat"><div class="stat-val">100+</div><div class="stat-label">Products</div></div>
+        </div>
+      </div>
+      <div class="hero-img-wrap">
+        <div class="hero-img">
+          <img src="https://images.unsplash.com/photo-1571781926291-c477ebfd024b?w=600&q=80" alt="GlowAI skincare" style="border-radius:32px"/>
+        </div>
+        <div class="hero-float">
+          <div class="hero-float-icon">🤖</div>
+          <div>
+            <div style="font-size:13px;font-weight:600;color:var(--text)">AI Skin Analysis</div>
+            <div style="font-size:11px;color:var(--text3)">Personalized for you</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CATEGORIES -->
+  <section class="section" style="background:var(--bg2)">
+    <div class="section-inner">
+      <div class="section-header">
+        <div class="section-badge">Browse</div>
+        <h2 class="section-title">Shop by Category</h2>
+        <p class="section-sub">Explore our premium skincare collection</p>
+      </div>
+      <div class="cats-grid" id="cats-grid"></div>
+    </div>
+  </section>
+
+  <!-- FEATURED PRODUCTS -->
+  <section class="section">
+    <div class="section-inner">
+      <div class="section-row">
+        <div>
+          <div class="section-badge">✨ Featured</div>
+          <h2 class="section-title">Featured Products</h2>
+        </div>
+        <button class="view-all" onclick="goTo('shop')">View All →</button>
+      </div>
+      <div class="products-grid" id="featured-grid"></div>
+    </div>
+  </section>
+
+  <!-- AI BANNER -->
+  <div style="max-width:1100px;margin:0 auto;padding:0 24px">
+    <div class="ai-banner">
+      <div class="ai-banner-inner">
+        <div>
+          <div style="display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,.15);border-radius:20px;padding:5px 14px;font-size:12px;color:#fff;margin-bottom:14px">🤖 Powered by Artificial Intelligence</div>
+          <h2>Meet Your Personal AI Beauty Assistant</h2>
+          <p>Take our smart skin quiz or chat with GlowAI Assistant to discover products perfectly matched to your skin.</p>
+          <button class="btn-primary" style="background:rgba(255,255,255,.95);color:#ec4899" onclick="goTo('quiz')">Take the Skin Quiz →</button>
+        </div>
+        <div>
+          <div class="ai-feature"><div class="ai-feature-icon">🧠</div><div class="ai-feature-text"><h4>AI Skin Analysis</h4><p>Personalized recs for your unique skin</p></div></div>
+          <div class="ai-feature"><div class="ai-feature-icon">🌿</div><div class="ai-feature-text"><h4>Curated Ingredients</h4><p>Only dermatologist-approved formulas</p></div></div>
+          <div class="ai-feature"><div class="ai-feature-icon">❤️</div><div class="ai-feature-text"><h4>Tailored Routines</h4><p>AM & PM routines designed for you</p></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- BEST SELLERS -->
+  <section class="section" style="background:var(--bg2)">
+    <div class="section-inner">
+      <div class="section-row">
+        <div>
+          <div class="section-badge">🔥 Best Sellers</div>
+          <h2 class="section-title">Best Sellers</h2>
+        </div>
+        <button class="view-all" onclick="goTo('shop')">View All →</button>
+      </div>
+      <div class="products-grid" id="bestseller-grid"></div>
+    </div>
+  </section>
+
+  <!-- TESTIMONIALS -->
+  <section class="section">
+    <div class="section-inner">
+      <div class="section-header">
+        <div class="section-badge">Reviews</div>
+        <h2 class="section-title">Loved by Thousands</h2>
+        <p class="section-sub">Real stories from our glowing community</p>
+      </div>
+      <div class="testi-grid" id="testi-grid"></div>
+    </div>
+  </section>
+</div>
+
+<!-- ====== SHOP PAGE ====== -->
+<div class="page" id="page-shop">
+  <div style="background:var(--bg2);padding:32px 24px;text-align:center">
+    <h1 style="font-size:36px;color:var(--text);margin-bottom:6px">Shop GlowAI</h1>
+    <p style="color:var(--text2)">Discover premium products curated for your skin</p>
+  </div>
+  <div class="shop-layout">
+    <aside class="shop-sidebar">
+      <div class="filter-title">Filters</div>
+      <div class="filter-section">
+        <div class="filter-label">Category</div>
+        <div id="shop-cats"></div>
+      </div>
+      <div class="filter-section">
+        <div class="filter-label">Price Range</div>
+        <input class="price-range" type="range" min="0" max="5000" value="5000" id="price-range" oninput="filterProducts()"/>
+        <div style="font-size:12px;color:var(--text2);margin-top:4px">Up to ₹<span id="price-val">5000</span></div>
+      </div>
+      <div class="filter-section">
+        <div class="filter-label">Skin Type</div>
+        <div class="skin-type-pills" id="skin-pills"></div>
+      </div>
+      <button style="width:100%;padding:8px;border:1px solid var(--border);border-radius:12px;background:none;color:var(--text2);cursor:pointer;font-size:13px;margin-top:4px" onclick="clearFilters()">Clear All Filters</button>
+    </aside>
+    <div class="shop-main">
+      <div class="shop-toolbar">
+        <div class="shop-search">
+          <span class="shop-search-icon">🔍</span>
+          <input type="text" placeholder="Search products..." id="shop-search" oninput="filterProducts()"/>
+        </div>
+        <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+          <span class="results-count" id="results-count"></span>
+          <select class="sort-select" id="sort-select" onchange="filterProducts()">
+            <option value="">Newest</option>
+            <option value="price_asc">Price: Low to High</option>
+            <option value="price_desc">Price: High to Low</option>
+            <option value="rating">Highest Rated</option>
+          </select>
+        </div>
+      </div>
+      <div class="products-grid" id="shop-grid"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ====== PRODUCT DETAIL PAGE ====== -->
+<div class="page" id="page-product">
+  <div class="product-detail">
+    <div style="font-size:13px;color:var(--text3);margin-bottom:20px;cursor:pointer" onclick="goTo('shop')">← Back to Shop</div>
+    <div class="pd-grid" id="pd-content"></div>
+    <div id="pd-tabs"></div>
+    <div style="margin-top:40px" id="related-products-section"></div>
+  </div>
+</div>
+
+<!-- ====== CART PAGE ====== -->
+<div class="page" id="page-cart">
+  <div class="cart-page">
+    <h1 style="font-size:28px;color:var(--text);margin-bottom:24px;font-family:'Playfair Display',serif">Shopping Bag <span id="cart-title-count" style="font-size:16px;color:var(--text3)"></span></h1>
+    <div id="cart-content"></div>
+  </div>
+</div>
+
+<!-- ====== SKIN QUIZ PAGE ====== -->
+<div class="page" id="page-quiz">
+  <div class="quiz-wrap">
+    <div style="text-align:center;margin-bottom:32px">
+      <div style="display:inline-flex;align-items:center;gap:6px;background:var(--pink-light);border-radius:20px;padding:6px 14px;font-size:12px;color:var(--pink);font-weight:600;margin-bottom:12px">🤖 AI-Powered Skin Analysis</div>
+      <h1 style="font-size:32px;color:var(--text);margin-bottom:8px">Discover Your Perfect Routine</h1>
+      <p style="color:var(--text2)">Answer 4 questions for personalized recommendations</p>
+    </div>
+    <div id="quiz-content"></div>
+  </div>
+</div>
+
+<!-- ====== ABOUT PAGE ====== -->
+<div class="page" id="page-about">
+  <div style="background:var(--bg2);padding:60px 24px;text-align:center">
+    <h1 style="font-size:36px;color:var(--text);margin-bottom:12px">Beauty, Reimagined with <span style="color:var(--pink);font-style:italic">Intelligence</span></h1>
+    <p style="color:var(--text2);max-width:560px;margin:0 auto;line-height:1.7">GlowAI was founded on a simple belief: everyone deserves skincare that truly understands their unique needs.</p>
+  </div>
+  <div style="max-width:1100px;margin:0 auto;padding:60px 24px">
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:24px;margin-bottom:48px">
+      <div style="background:var(--card);border:1px solid var(--border);border-radius:20px;padding:24px;text-align:center" v *ngFor>
+        <div style="font-size:36px;margin-bottom:12px">🌿</div>
+        <h3 style="font-size:15px;color:var(--text);margin-bottom:6px">Clean Ingredients</h3>
+        <p style="font-size:13px;color:var(--text2)">Dermatologist-approved, cruelty-free formulas only</p>
+      </div>
+      <div style="background:var(--card);border:1px solid var(--border);border-radius:20px;padding:24px;text-align:center">
+        <div style="font-size:36px;margin-bottom:12px">🧪</div>
+        <h3 style="font-size:15px;color:var(--text);margin-bottom:6px">Science-Backed</h3>
+        <p style="font-size:13px;color:var(--text2)">Proven actives at clinically effective concentrations</p>
+      </div>
+      <div style="background:var(--card);border:1px solid var(--border);border-radius:20px;padding:24px;text-align:center">
+        <div style="font-size:36px;margin-bottom:12px">❤️</div>
+        <h3 style="font-size:15px;color:var(--text);margin-bottom:6px">Inclusive Beauty</h3>
+        <p style="font-size:13px;color:var(--text2)">AI ensures recommendations work for every skin type</p>
+      </div>
+      <div style="background:var(--card);border:1px solid var(--border);border-radius:20px;padding:24px;text-align:center">
+        <div style="font-size:36px;margin-bottom:12px">🌍</div>
+        <h3 style="font-size:15px;color:var(--text);margin-bottom:6px">Sustainable</h3>
+        <p style="font-size:13px;color:var(--text2)">Eco-conscious packaging and ethical sourcing</p>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:24px;text-align:center;background:var(--bg2);border-radius:24px;padding:40px">
+      <div><div style="font-size:32px;font-family:'Playfair Display',serif;font-weight:700;color:var(--pink)">50K+</div><div style="font-size:13px;color:var(--text2)">Happy Customers</div></div>
+      <div><div style="font-size:32px;font-family:'Playfair Display',serif;font-weight:700;color:var(--pink)">100+</div><div style="font-size:13px;color:var(--text2)">Premium Products</div></div>
+      <div><div style="font-size:32px;font-family:'Playfair Display',serif;font-weight:700;color:var(--pink)">4.8/5</div><div style="font-size:13px;color:var(--text2)">Average Rating</div></div>
+      <div><div style="font-size:32px;font-family:'Playfair Display',serif;font-weight:700;color:var(--pink)">24/7</div><div style="font-size:13px;color:var(--text2)">AI Assistant</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ====== CHATBOT ====== -->
+<button class="chatbot-btn" onclick="toggleChat()" id="chatbot-btn" title="Open GlowAI Assistant">✨</button>
+<div class="chatbot-window hidden" id="chatbot-window">
+  <div class="chat-header">
+    <div class="chat-avatar">🌸</div>
+    <div class="chat-header-info">
+      <div class="chat-title">GlowAI Assistant</div>
+      <div class="chat-status">● Online — Your beauty advisor</div>
+    </div>
+    <button onclick="toggleChat()" style="margin-left:auto;background:none;border:none;color:#fff;cursor:pointer;font-size:18px;opacity:.8">✕</button>
+  </div>
+  <div class="chat-messages" id="chat-messages"></div>
+  <div class="chat-suggestions" id="chat-suggestions"></div>
+  <div class="chat-input-row">
+    <input class="chat-input" id="chat-input" placeholder="Ask about your skin..." onkeydown="if(event.key==='Enter')sendChat()"/>
+    <button class="chat-send" onclick="sendChat()">➤</button>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-grid">
+      <div>
+        <div class="footer-logo">
+          <div class="footer-logo-circle">G</div>
+          <span class="footer-brand">GlowAI</span>
+        </div>
+        <p class="footer-desc">Premium AI-powered skincare and beauty platform. Discover products tailored to your unique skin.</p>
+        <div class="footer-socials">
+          <div class="social-btn">📷</div>
+          <div class="social-btn">📘</div>
+          <div class="social-btn">🐦</div>
+          <div class="social-btn">📌</div>
+        </div>
+      </div>
+      <div>
+        <h4 class="footer-col h4" style="font-size:13px;font-weight:600;color:#fff;margin-bottom:14px">Shop</h4>
+        <div class="footer-links">
+          <span class="footer-link" onclick="goTo('shop')">All Products</span>
+          <span class="footer-link" onclick="goTo('shop')">Best Sellers</span>
+          <span class="footer-link" onclick="goTo('shop')">New Arrivals</span>
+          <span class="footer-link" onclick="goTo('quiz')">Skin Quiz</span>
+        </div>
+      </div>
+      <div>
+        <h4 style="font-size:13px;font-weight:600;color:#fff;margin-bottom:14px">Company</h4>
+        <div class="footer-links">
+          <span class="footer-link" onclick="goTo('about')">About Us</span>
+          <span class="footer-link">Contact</span>
+          <span class="footer-link">FAQ</span>
+          <span class="footer-link">Privacy Policy</span>
+        </div>
+      </div>
+      <div>
+        <h4 style="font-size:13px;font-weight:600;color:#fff;margin-bottom:14px">Contact</h4>
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <span style="font-size:13px;color:#888">📍 Mumbai, India</span>
+          <span style="font-size:13px;color:#888">📞 +91 98765 43210</span>
+          <span style="font-size:13px;color:#888">✉️ hello@glowai.com</span>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span class="footer-copy">© 2026 GlowAI. All rights reserved.</span>
+      <span class="footer-copy">Made with 💗 for radiant skin everywhere</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+const PRODUCTS=[
+  {id:1,name:'Radiance Vitamin C Brightening Serum',brand:'GlowLab',cat:'Serums',price:2499,disc:1999,rating:4.8,reviews:234,emoji:'💧',img:'https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=400&q=80',badge:'off',new:false,bestseller:true,featured:true,skinTypes:['oily','combination'],desc:'Award-winning 15% Vitamin C serum with Vitamin E and Ferulic Acid. Fades dark spots, evens tone, and boosts radiance within 4 weeks.',ingredients:['L-Ascorbic Acid 15%','Vitamin E','Ferulic Acid','Hyaluronic Acid','Niacinamide'],benefits:['Fades dark spots','Brightens complexion','Antioxidant protection','Smooths texture'],howTo:'Apply 3-4 drops every morning. Follow with moisturizer and SPF.'},
+  {id:2,name:'Hyaluronic Acid Deep Hydration Serum',brand:'AquaGlow',cat:'Serums',price:1899,disc:1499,rating:4.9,reviews:412,emoji:'💦',img:'https://images.unsplash.com/photo-1556228852-80b6e1cdb9e1?w=400&q=80',badge:'off',new:false,bestseller:true,featured:true,skinTypes:['dry','sensitive','all'],desc:'Multi-molecular Hyaluronic Acid penetrates all skin layers for 72-hour deep hydration, plumped skin, and a glass-skin effect.',ingredients:['Sodium Hyaluronate 3MW','Panthenol','Ceramides','Glycerin'],benefits:['Deep hydration','Plumps fine lines','Restores moisture barrier','Glass skin effect'],howTo:'Apply 4-5 drops to damp skin twice daily before moisturizer.'},
+  {id:3,name:'Niacinamide 10% + Zinc 1% Serum',brand:'ClearSkin',cat:'Serums',price:1299,disc:999,rating:4.7,reviews:567,emoji:'🌿',img:'https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=400&q=80',badge:'off',new:false,bestseller:true,featured:false,skinTypes:['oily','combination'],desc:'10% Niacinamide + 1% Zinc PCA to regulate oil, minimize pores, and improve skin tone. Lightweight formula for all routines.',ingredients:['Niacinamide 10%','Zinc PCA 1%','Hyaluronic Acid','Glycerin'],benefits:['Controls oil','Minimizes pores','Reduces blemishes','Even tone'],howTo:'Apply twice daily to clean skin before heavier serums.'},
+  {id:4,name:'Ceramide Barrier Repair Moisturizer',brand:'BarrierFix',cat:'Moisturizers',price:1799,disc:1499,rating:4.8,reviews:298,emoji:'🧴',img:'https://images.unsplash.com/photo-1607602878068-a3b4d58e6d3a?w=400&q=80',badge:'off',new:false,bestseller:true,featured:true,skinTypes:['dry','sensitive','all'],desc:'Ceramide complex moisturizer that mirrors skin\'s natural lipids. Fortifies moisture barrier, reduces sensitivity, 24-hour hydration.',ingredients:['Ceramide NP','Ceramide AP','Hyaluronic Acid','Niacinamide','Panthenol'],benefits:['Repairs moisture barrier','Reduces sensitivity','24-hour hydration','Soothes redness'],howTo:'Apply morning and evening as the last skincare step.'},
+  {id:5,name:'SPF 50+ PA++++ Daily Sun Fluid',brand:'SunShield',cat:'Sunscreens',price:1799,disc:1499,rating:4.9,reviews:789,emoji:'☀️',img:'https://images.unsplash.com/photo-1603384544994-afe3b3654ead?w=400&q=80',badge:'off',new:false,bestseller:true,featured:true,skinTypes:['all'],desc:'Invisible sun fluid with SPF 50+ and zero white cast. Enriched with Vitamin C and Niacinamide. Water-resistant under makeup.',ingredients:['Zinc Oxide','Tinosorb S','Niacinamide','Vitamin C','Hyaluronic Acid'],benefits:['SPF 50+ protection','No white cast','Brightening','Water-resistant'],howTo:'Apply 1/4 tsp for face as last skincare step. Reapply every 2 hours outdoors.'},
+  {id:6,name:'Caffeine Eye Serum — Depuff + Brighten',brand:'EyeRevive',cat:'Eye Care',price:1699,disc:1399,rating:4.8,reviews:345,emoji:'👁️',img:'https://images.unsplash.com/photo-1598300042247-d088f8ab3a91?w=400&q=80',badge:'off',new:true,bestseller:true,featured:true,skinTypes:['all'],desc:'5% Caffeine + Hyaluronic Acid eye serum instantly reduces puffiness, minimizes dark circles, and smooths crow\'s feet with cooling application.',ingredients:['Caffeine 5%','Hyaluronic Acid','Peptides','Vitamin K','Green Tea'],benefits:['Reduces puffiness','Brightens dark circles','Smooths fine lines','Instant cooling'],howTo:'Pat 1-2 drops around orbital bone morning and evening.'},
+  {id:7,name:'Kaolin Clay Deep Pore Detox Mask',brand:'PureDetox',cat:'Face Masks',price:1299,disc:999,rating:4.6,reviews:345,emoji:'💆',img:'https://images.unsplash.com/photo-1590439471364-192aa70c0b53?w=400&q=80',badge:'off',new:false,bestseller:false,featured:false,skinTypes:['oily','combination'],desc:'Kaolin & Bentonite clay + Activated Charcoal deeply cleanses pores and removes impurities. Leaves skin visibly refined and poreless.',ingredients:['Kaolin Clay','Bentonite Clay','Activated Charcoal','Salicylic Acid','Tea Tree Oil'],benefits:['Deep pore cleansing','Oil control','Removes blackheads','Tightens pores'],howTo:'Apply thin layer, leave 10-15 min, rinse. Use 1-2x per week.'},
+  {id:8,name:'AHA BHA Exfoliating Toner',brand:'Resurface+',cat:'Toners',price:1599,disc:1299,rating:4.7,reviews:423,emoji:'🌸',img:'https://images.unsplash.com/photo-1631390874050-98e7b2d18e07?w=400&q=80',badge:'off',new:false,bestseller:true,featured:false,skinTypes:['oily','combination','normal'],desc:'5% Glycolic Acid + 2% Salicylic Acid liquid exfoliant. Dissolves dead cells, unclogs pores, smooths texture without scrubbing.',ingredients:['Glycolic Acid 5%','Salicylic Acid 2%','Rose Water','Aloe Vera','Niacinamide'],benefits:['Exfoliates dead cells','Unclogs pores','Smooths texture','Fades dark spots'],howTo:'Apply PM only with cotton pad. Start 2-3x per week. Always use SPF.'},
+  {id:9,name:'Peptide Firming Lip Treatment',brand:'LipLux',cat:'Lip Care',price:799,disc:649,rating:4.8,reviews:890,emoji:'💋',img:'https://images.unsplash.com/photo-1556228453-efd6c1ff04f6?w=400&q=80',badge:'off',new:false,bestseller:true,featured:false,skinTypes:['all'],desc:'Peptides + Hyaluronic Acid lip treatment visibly plumps lips, reduces fine lines, and provides deep nourishing moisture instantly.',ingredients:['Peptide Complex','Hyaluronic Acid','Vitamin E','Shea Butter','Ceramides'],benefits:['Plumps lips','Reduces lip lines','Deep moisture','Softens immediately'],howTo:'Apply throughout the day or as an overnight lip mask.'},
+  {id:10,name:'Retinol 0.5% Renewal Night Serum',brand:'NightGlow',cat:'Serums',price:2999,disc:2499,rating:4.6,reviews:189,emoji:'🌙',img:'https://images.unsplash.com/photo-1571781926291-c477ebfd024b?w=400&q=80',badge:'off',new:true,bestseller:false,featured:true,skinTypes:['normal','combination'],desc:'Encapsulated Retinol 0.5% for slow-release overnight delivery. Minimizes irritation while stimulating collagen and cell turnover.',ingredients:['Retinol 0.5%','Ceramides','Peptides','Squalane','Hyaluronic Acid'],benefits:['Reduces wrinkles','Boosts cell turnover','Stimulates collagen','Smooths texture'],howTo:'PM only. Start 2x per week and increase gradually. Follow with moisturizer.'},
+  {id:11,name:'Rose Petal Glow Sheet Mask',brand:'PetalGlow',cat:'Face Masks',price:399,disc:299,rating:4.7,reviews:1234,emoji:'🌹',img:'https://images.unsplash.com/photo-1631390874050-98e7b2d18e07?w=400&q=80',badge:'off',new:false,bestseller:true,featured:false,skinTypes:['all'],desc:'Rose Extract + Hyaluronic Acid sheet mask floods skin with hydration for instant glass-skin effect. Biodegradable & eco-friendly.',ingredients:['Rose Extract','Hyaluronic Acid','Vitamin C','Niacinamide','Aloe Vera'],benefits:['Instant hydration','Radiant glow','Plumps skin','Soothing'],howTo:'Apply to clean face, leave 15-20 min, remove and pat remaining essence.'},
+  {id:12,name:'Hydrating Rose Water Toner',brand:'PetalGlow',cat:'Toners',price:899,disc:749,rating:4.8,reviews:678,emoji:'🌸',img:'https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=400&q=80',badge:'off',new:false,bestseller:true,featured:false,skinTypes:['all','sensitive','dry'],desc:'Pure Bulgarian Damask rose water balances pH, preps skin for serums, and delivers a burst of rose-powered hydration. Alcohol-free.',ingredients:['Bulgarian Rose Water','Glycerin','Hyaluronic Acid','Aloe Vera'],benefits:['Balances pH','Hydrates','Soothes redness','Preps for serums'],howTo:'Apply after cleansing. Follow immediately with serums and moisturizer.'},
+];
+
+const CATS=[
+  {name:'Serums',icon:'💧',count:5},{name:'Moisturizers',icon:'🧴',count:3},{name:'Sunscreens',icon:'☀️',count:2},
+  {name:'Eye Care',icon:'👁️',count:2},{name:'Face Masks',icon:'💆',count:3},{name:'Toners',icon:'🌸',count:2},
+  {name:'Cleansers',icon:'✨',count:3},{name:'Lip Care',icon:'💋',count:1}
+];
+
+const TESTIMONIALS=[
+  {name:'Priya Sharma',role:'Verified Buyer',init:'PS',rating:5,text:'The AI quiz recommended the perfect combo for my skin. Dark spots have visibly faded in just a month! Absolutely love GlowAI.'},
+  {name:'Ananya Reddy',role:'Skincare Enthusiast',init:'AR',rating:5,text:'The GlowAI chatbot is like having a dermatologist in my pocket. Suggested a routine for my acne and I\'ve seen incredible results!'},
+  {name:'Kavya Nair',role:'Beauty Blogger',init:'KN',rating:5,text:'As someone who reviews dozens of brands, GlowAI stands out. Premium feel, AI personalization — it\'s truly next level.'},
+  {name:'Meera Iyer',role:'Verified Buyer',init:'MI',rating:4,text:'Love the packaging, quality and personalized recs. The Ceramide moisturizer is a holy grail for my dry skin!'},
+];
+
+const QUIZ_QS=[
+  {q:'How does your skin feel hours after washing?',options:[{v:'oily',label:'Shiny and greasy',e:'✨'},{v:'dry',label:'Tight or flaky',e:'🏜️'},{v:'combination',label:'Oily T-zone, dry cheeks',e:'⚖️'},{v:'sensitive',label:'Red or easily irritated',e:'🌸'},{v:'normal',label:'Balanced and comfortable',e:'😊'}]},
+  {q:'Your #1 skin concern right now?',options:[{v:'acne',label:'Acne & breakouts',e:'🎯'},{v:'dark spots',label:'Dark spots & pigmentation',e:'🌟'},{v:'aging',label:'Fine lines & wrinkles',e:'⏳'},{v:'dryness',label:'Dryness & dehydration',e:'💧'},{v:'pores',label:'Large pores',e:'🔍'}]},
+  {q:'Your current skincare routine?',options:[{v:'minimal',label:'Just cleanse & moisturize',e:'🧼'},{v:'basic',label:'Cleanser, moisturizer, SPF',e:'☀️'},{v:'advanced',label:'Multiple serums & actives',e:'🧪'},{v:'none',label:"I don't have one",e:'🤷'}]},
+  {q:'What matters most to you in skincare?',options:[{v:'results',label:'Fast visible results',e:'⚡'},{v:'natural',label:'Natural clean ingredients',e:'🌿'},{v:'affordable',label:'Best value for money',e:'💰'},{v:'luxury',label:'Premium luxury experience',e:'👑'}]},
+];
+
+const ROUTINES={
+  oily:['Salicylic Acid Cleanser (AM & PM)','Niacinamide + Zinc Serum','Oil-Free Gel Moisturizer','SPF 50+ (AM)','BHA Exfoliant (PM, 2x/week)'],
+  dry:['Creamy Gentle Cleanser','Hyaluronic Acid Serum (on damp skin)','Rich Ceramide Moisturizer','Facial Oil (PM)','SPF 50 (AM)'],
+  combination:['Balancing Foam Cleanser','Niacinamide Serum','Lightweight Gel-Cream Moisturizer','SPF 30+ (AM)','AHA Toner (PM, 2x/week)'],
+  sensitive:['Micellar Water Cleanser','Centella Asiatica Calming Serum','Ceramide Barrier Moisturizer','Mineral SPF (AM)','Sleeping Mask (2x/week)'],
+  normal:['Gentle Cleanser','Vitamin C Serum (AM)','Retinol Serum (PM)','Moisturizer','SPF 50 (AM)'],
+};
+
+let cart={}, wishlist=new Set(), currentCat='', activeSkinType='', currentProduct=null, chatOpen=false, quizStep=0, quizAnswers={}, darkMode=false;
+
+function goTo(page){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-link').forEach(l=>l.classList.remove('active'));
+  const el=document.getElementById('page-'+page);
+  if(el) el.classList.add('active');
+  const nav=document.getElementById('nav-'+page);
+  if(nav) nav.classList.add('active');
+  window.scrollTo({top:0,behavior:'smooth'});
+  if(page==='shop') renderShop();
+  if(page==='cart') renderCart();
+  if(page==='quiz'){quizStep=0;quizAnswers={};renderQuiz();}
+}
+
+function toggleTheme(){
+  darkMode=!darkMode;
+  document.body.classList.toggle('dark',darkMode);
+  document.querySelector('.icon-btn[title="Toggle dark mode"]').textContent=darkMode?'☀️':'🌙';
+}
+
+function showToast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg;t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2500);
+}
+
+function updateCartBadge(){
+  const total=Object.values(cart).reduce((s,i)=>s+i.qty,0);
+  const b=document.getElementById('cart-badge');
+  b.style.display=total>0?'flex':'none';
+  b.textContent=total>9?'9+':total;
+}
+
+function addToCart(id){
+  const p=PRODUCTS.find(x=>x.id===id);if(!p)return;
+  if(cart[id]){cart[id].qty++}else{cart[id]={...p,qty:1}}
+  updateCartBadge();
+  showToast('Added to bag 🛍️');
+  document.querySelectorAll('.add-btn[data-id="'+id+'"]').forEach(b=>{
+    b.textContent='✓ Added';b.style.background='#22c55e';
+    setTimeout(()=>{b.textContent='Add to Bag';b.style.background='';},1500);
+  });
+}
+
+function toggleWish(id){
+  if(wishlist.has(id)){wishlist.delete(id);showToast('Removed from wishlist')}
+  else{wishlist.add(id);showToast('Added to wishlist ❤️')}
+  document.querySelectorAll('.wish-btn[data-id="'+id+'"]').forEach(b=>{
+    b.classList.toggle('wished',wishlist.has(id));
+    b.textContent=wishlist.has(id)?'❤️':'🤍';
+  });
+}
+
+function renderStars(r){
+  const full=Math.floor(r), half=r%1>=0.5;
+  let s='';
+  for(let i=0;i<full;i++)s+='⭐';
+  if(half)s+='✨';
+  return s;
+}
+
+function makeProductCard(p,index){
+  const off=p.disc>0?Math.round((p.price-p.disc)/p.price*100):0;
+  const wished=wishlist.has(p.id);
+  return `<div class="product-card" onclick="openProduct(${p.id})">
+    <div class="product-img">
+      <img src="${p.img}" alt="${p.name}" loading="lazy" style="border-radius:0" onerror="this.style.display='none';this.parentNode.innerHTML+='<span style=font-size:56px>${p.emoji}</span>'"/>
+      <div class="product-badges">
+        ${off>0?`<span class="badge-off">${off}% OFF</span>`:''}
+        ${p.new?'<span class="badge-new">NEW</span>':''}
+      </div>
+      <button class="wish-btn ${wished?'wished':''}" data-id="${p.id}" onclick="event.stopPropagation();toggleWish(${p.id})">${wished?'❤️':'🤍'}</button>
+    </div>
+    <div class="product-info">
+      <div class="product-brand">${p.brand}</div>
+      <div class="product-name">${p.name}</div>
+      <div class="product-stars"><span class="stars">${renderStars(p.rating)}</span><span class="stars-count">(${p.reviews})</span></div>
+      <div class="product-price">
+        <span class="price-now">₹${p.disc>0?p.disc.toLocaleString('en-IN'):p.price.toLocaleString('en-IN')}</span>
+        ${p.disc>0?`<span class="price-old">₹${p.price.toLocaleString('en-IN')}</span>`:''}
+      </div>
+      <button class="add-btn" data-id="${p.id}" onclick="event.stopPropagation();addToCart(${p.id})">Add to Bag</button>
+    </div>
+  </div>`;
+}
+
+function initHome(){
+  // Categories
+  const cg=document.getElementById('cats-grid');
+  if(cg) cg.innerHTML=CATS.map(c=>`<div class="cat-card" onclick="goTo('shop')"><div class="cat-icon">${c.icon}</div><div class="cat-name">${c.name}</div><div class="cat-count">${c.count} items</div></div>`).join('');
+  // Featured
+  const fg=document.getElementById('featured-grid');
+  if(fg) fg.innerHTML=PRODUCTS.filter(p=>p.featured).slice(0,4).map((p,i)=>makeProductCard(p,i)).join('');
+  // Bestsellers
+  const bg=document.getElementById('bestseller-grid');
+  if(bg) bg.innerHTML=PRODUCTS.filter(p=>p.bestseller).slice(0,4).map((p,i)=>makeProductCard(p,i)).join('');
+  // Testimonials
+  const tg=document.getElementById('testi-grid');
+  if(tg) tg.innerHTML=TESTIMONIALS.map(t=>`<div class="testi-card"><div class="testi-quote">"</div><p class="testi-text">${t.text}</p><div style="display:flex;gap:2px;margin-bottom:10px">${'⭐'.repeat(t.rating)}</div><div class="testi-author"><div class="testi-avatar">${t.init}</div><div><div class="testi-name">${t.name}</div><div class="testi-role">${t.role}</div></div></div></div>`).join('');
+}
+
+function renderShop(){
+  const sg=document.getElementById('shop-grid');
+  if(!sg)return;
+  // sidebar cats
+  const sc=document.getElementById('shop-cats');
+  if(sc&&!sc.innerHTML) sc.innerHTML=[{name:'All',val:''},...CATS.map(c=>({name:c.name,val:c.name}))].map(c=>`<label class="filter-option"><input type="radio" name="cat" value="${c.val}" ${currentCat===c.val?'checked':''} onchange="currentCat=this.value;filterProducts()"/>${c.name}</label>`).join('');
+  // skin pills
+  const sp=document.getElementById('skin-pills');
+  if(sp&&!sp.innerHTML) ['all','oily','dry','combination','sensitive'].forEach(t=>{const b=document.createElement('button');b.className='skin-pill'+(activeSkinType===t?' active':'');b.textContent=t;b.onclick=()=>{activeSkinType=activeSkinType===t?'':t;document.querySelectorAll('.skin-pill').forEach(p=>p.classList.remove('active'));if(activeSkinType)b.classList.add('active');filterProducts()};sp.appendChild(b);});
+  filterProducts();
+}
+
+function filterProducts(){
+  const search=(document.getElementById('shop-search')||{}).value?.toLowerCase()||'';
+  const maxPrice=Number((document.getElementById('price-range')||{}).value||5000);
+  const priceEl=document.getElementById('price-val');if(priceEl)priceEl.textContent=maxPrice;
+  const sort=(document.getElementById('sort-select')||{}).value||'';
+  let filtered=PRODUCTS.filter(p=>{
+    const matchCat=!currentCat||p.cat===currentCat;
+    const matchSearch=!search||p.name.toLowerCase().includes(search)||p.brand.toLowerCase().includes(search)||p.cat.toLowerCase().includes(search);
+    const matchPrice=(p.disc||p.price)<=maxPrice;
+    const matchSkin=!activeSkinType||activeSkinType==='all'||p.skinTypes.includes(activeSkinType)||p.skinTypes.includes('all');
+    return matchCat&&matchSearch&&matchPrice&&matchSkin;
+  });
+  if(sort==='price_asc')filtered.sort((a,b)=>(a.disc||a.price)-(b.disc||b.price));
+  else if(sort==='price_desc')filtered.sort((a,b)=>(b.disc||b.price)-(a.disc||a.price));
+  else if(sort==='rating')filtered.sort((a,b)=>b.rating-a.rating);
+  const rc=document.getElementById('results-count');
+  if(rc)rc.textContent=`${filtered.length} product${filtered.length!==1?'s':''}`;
+  const sg=document.getElementById('shop-grid');
+  if(sg)sg.innerHTML=filtered.length?filtered.map((p,i)=>makeProductCard(p,i)).join(''):`<div style="grid-column:1/-1;text-align:center;padding:48px;color:var(--text2)"><div style="font-size:48px;margin-bottom:12px">🔍</div><p>No products found. Try adjusting your filters.</p></div>`;
+}
+
+function clearFilters(){
+  currentCat='';activeSkinType='';
+  const s=document.getElementById('shop-search');if(s)s.value='';
+  const pr=document.getElementById('price-range');if(pr)pr.value=5000;
+  const pv=document.getElementById('price-val');if(pv)pv.textContent=5000;
+  document.querySelectorAll('input[name="cat"]').forEach(r=>{r.checked=r.value===''});
+  document.querySelectorAll('.skin-pill').forEach(p=>p.classList.remove('active'));
+  filterProducts();
+}
+
+function openProduct(id){
+  currentProduct=PRODUCTS.find(p=>p.id===id);
+  if(!currentProduct)return;
+  const p=currentProduct;
+  const off=p.disc>0?Math.round((p.price-p.disc)/p.price*100):0;
+  const wished=wishlist.has(p.id);
+  document.getElementById('pd-content').innerHTML=`
+    <div class="pd-img">${p.img?`<img src="${p.img}" alt="${p.name}" style="width:100%;height:100%;object-fit:cover;border-radius:24px" onerror="this.style.display='none';this.parentNode.innerHTML='<span style=font-size:100px>${p.emoji}</span>'"/>`:p.emoji}</div>
+    <div>
+      <div class="pd-brand">${p.brand}</div>
+      <h1 class="pd-name">${p.name}</h1>
+      <div class="pd-stars"><span style="font-size:16px">${renderStars(p.rating)}</span><span style="font-size:13px;color:var(--text3);margin-left:6px">(${p.reviews} reviews)</span></div>
+      <div class="pd-price">
+        <span class="pd-price-now">₹${(p.disc||p.price).toLocaleString('en-IN')}</span>
+        ${p.disc>0?`<span class="pd-price-old">₹${p.price.toLocaleString('en-IN')}</span><span style="background:#ec4899;color:#fff;border-radius:10px;padding:2px 8px;font-size:11px;font-weight:700;margin-left:6px">${off}% OFF</span>`:''}
+      </div>
+      <p class="pd-desc">${p.desc}</p>
+      <div class="pd-tags">${p.skinTypes.map(t=>`<span class="pd-tag">${t} skin</span>`).join('')}</div>
+      <div class="pd-actions">
+        <div class="qty-wrap">
+          <button class="qty-btn" onclick="changeQty(-1)">−</button>
+          <span class="qty-num" id="pd-qty">1</span>
+          <button class="qty-btn" onclick="changeQty(1)">+</button>
+        </div>
+        <button class="btn-primary" style="flex:1;border-radius:16px;padding:14px" onclick="addToCartFromDetail(${p.id})">🛍️ Add to Bag</button>
+        <button class="pd-wish ${wished?'wished':''}" id="pd-wish-btn" onclick="toggleWish(${p.id});this.textContent=wishlist.has(${p.id})?'❤️':'🤍';this.classList.toggle('wished',wishlist.has(${p.id}))">${wished?'❤️':'🤍'}</button>
+      </div>
+      <div class="trust-badges">
+        <div class="trust-badge"><span>🚚</span>Free shipping<br>over ₹999</div>
+        <div class="trust-badge"><span>↩️</span>7-day easy<br>returns</div>
+        <div class="trust-badge"><span>✅</span>100%<br>authentic</div>
+      </div>
+    </div>`;
+  document.getElementById('pd-tabs').innerHTML=`
+    <div class="tabs">
+      <div class="tab-list">
+        <button class="tab-btn active" onclick="switchTab(0,this)">Description</button>
+        <button class="tab-btn" onclick="switchTab(1,this)">Ingredients</button>
+        <button class="tab-btn" onclick="switchTab(2,this)">Benefits</button>
+      </div>
+      <div class="tab-panel active" id="tab-0"><p style="font-size:14px;color:var(--text2);line-height:1.7">${p.desc}</p>${p.howTo?`<div style="background:var(--bg2);border-radius:12px;padding:14px;margin-top:16px"><strong style="font-size:13px;color:var(--text)">How to Use:</strong><p style="font-size:13px;color:var(--text2);margin-top:4px">${p.howTo}</p></div>`:''}</div>
+      <div class="tab-panel" id="tab-1"><div class="ingredients-grid">${p.ingredients.map(i=>`<div class="ing-item"><div class="ing-dot"></div>${i}</div>`).join('')}</div></div>
+      <div class="tab-panel" id="tab-2"><div class="benefits-list">${p.benefits.map(b=>`<div class="benefit-item"><span class="benefit-check">✓</span>${b}</div>`).join('')}</div></div>
+    </div>`;
+  const related=PRODUCTS.filter(x=>x.cat===p.cat&&x.id!==p.id).slice(0,4);
+  document.getElementById('related-products-section').innerHTML=related.length?`<h2 style="font-size:22px;color:var(--text);margin-bottom:20px;font-family:'Playfair Display',serif">You May Also Like</h2><div class="products-grid">${related.map((rp,i)=>makeProductCard(rp,i)).join('')}</div>`:'';
+  goTo('product');
+}
+
+function switchTab(idx,btn){
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('tab-'+idx).classList.add('active');
+}
+
+let pdQty=1;
+function changeQty(d){pdQty=Math.max(1,Math.min(99,pdQty+d));const el=document.getElementById('pd-qty');if(el)el.textContent=pdQty;}
+function addToCartFromDetail(id){
+  const p=PRODUCTS.find(x=>x.id===id);if(!p)return;
+  if(cart[id])cart[id].qty+=pdQty;else cart[id]={...p,qty:pdQty};
+  updateCartBadge();showToast(`${pdQty} item${pdQty>1?'s':''} added to bag 🛍️`);
+}
+
+function renderCart(){
+  const cont=document.getElementById('cart-content');
+  const items=Object.values(cart);
+  const countEl=document.getElementById('cart-title-count');
+  const total=items.reduce((s,i)=>s+i.qty,0);
+  if(countEl)countEl.textContent=`(${total} item${total!==1?'s':''})`;
+  if(!items.length){
+    cont.innerHTML=`<div class="empty-cart"><div class="empty-emoji">🛍️</div><h2 style="font-size:22px;color:var(--text);margin-bottom:8px">Your bag is empty</h2><p style="color:var(--text2);margin-bottom:24px">Start shopping to fill it with amazing products!</p><button class="btn-primary" onclick="goTo('shop')">Explore Products</button></div>`;
+    return;
+  }
+  const subtotal=items.reduce((s,i)=>s+(i.disc||i.price)*i.qty,0);
+  const shipping=subtotal>999?0:99;
+  const tax=Math.round(subtotal*.18);
+  const total_price=subtotal+shipping+tax;
+  cont.innerHTML=`<div class="cart-grid">
+    <div class="cart-items">${items.map(item=>`
+      <div class="cart-item">
+        <div class="cart-item-img">${item.img?`<img src="${item.img}" style="width:100%;height:100%;object-fit:cover;border-radius:12px" onerror="this.outerHTML='<span style=font-size:32px>${item.emoji}</span>'"/>`:item.emoji}</div>
+        <div class="cart-item-info">
+          <div class="cart-item-name">${item.name}</div>
+          <div class="cart-item-price">₹${(item.disc||item.price).toLocaleString('en-IN')}</div>
+          <div class="qty-ctrl">
+            <button class="qty-btn" onclick="updateCartQty(${item.id},-1)">−</button>
+            <span class="qty-num">${item.qty}</span>
+            <button class="qty-btn" onclick="updateCartQty(${item.id},1)">+</button>
+          </div>
+        </div>
+        <div style="text-align:right">
+          <div style="font-size:14px;font-weight:700;color:var(--text)">₹${((item.disc||item.price)*item.qty).toLocaleString('en-IN')}</div>
+          <button class="remove-btn" onclick="removeCartItem(${item.id})" style="margin-top:8px" title="Remove">🗑️</button>
+        </div>
+      </div>`).join('')}</div>
+    <div class="order-summary">
+      <div class="summary-title">Order Summary</div>
+      <div class="summary-row"><span>Subtotal</span><span>₹${subtotal.toLocaleString('en-IN')}</span></div>
+      <div class="summary-row"><span>Shipping</span><span style="color:${shipping===0?'#22c55e':'inherit'}">${shipping===0?'FREE':'₹'+shipping}</span></div>
+      <div class="summary-row"><span>Tax (GST 18%)</span><span>₹${tax.toLocaleString('en-IN')}</span></div>
+      ${subtotal<999&&subtotal>0?`<p style="font-size:12px;color:var(--pink);background:var(--pink-light);border-radius:8px;padding:8px;margin:4px 0">Add ₹${(999-subtotal).toLocaleString('en-IN')} more for free shipping!</p>`:''}
+      <div class="coupon-row">
+        <input class="coupon-input" id="coupon-input" placeholder="Coupon code (try GLOW10)" onkeydown="if(event.key==='Enter')applyCoupon()"/>
+        <button class="coupon-btn" onclick="applyCoupon()">Apply</button>
+      </div>
+      <div id="coupon-msg" style="font-size:12px;min-height:16px"></div>
+      <div class="summary-divider"></div>
+      <div class="summary-total"><span>Total</span><span id="cart-total">₹${total_price.toLocaleString('en-IN')}</span></div>
+      <button class="checkout-btn" onclick="showToast('Proceeding to checkout! (Demo mode) 🎉')">Proceed to Checkout →</button>
+      <button class="view-all" style="width:100%;justify-content:center;margin-top:10px" onclick="goTo('shop')">← Continue Shopping</button>
+    </div>
+  </div>`;
+}
+
+function updateCartQty(id,d){
+  if(!cart[id])return;
+  cart[id].qty+=d;
+  if(cart[id].qty<1)delete cart[id];
+  updateCartBadge();renderCart();
+}
+function removeCartItem(id){delete cart[id];updateCartBadge();renderCart();showToast('Item removed');}
+function applyCoupon(){
+  const code=(document.getElementById('coupon-input')||{}).value?.toUpperCase().trim();
+  const msg=document.getElementById('coupon-msg');
+  if(code==='GLOW10'){msg.innerHTML='<span style="color:#22c55e">✓ 10% discount applied!</span>';showToast('Coupon GLOW10 applied! 🎉');}
+  else if(code==='WELCOME20'){msg.innerHTML='<span style="color:#22c55e">✓ 20% welcome discount applied!</span>';showToast('Coupon WELCOME20 applied!');}
+  else{msg.innerHTML='<span style="color:#ef4444">✗ Invalid coupon code</span>';}
+}
+
+function renderQuiz(){
+  const cont=document.getElementById('quiz-content');
+  if(quizStep>=QUIZ_QS.length){
+    const skinType=quizAnswers[0]||'normal';
+    const routine=ROUTINES[skinType]||ROUTINES.normal;
+    const recs=PRODUCTS.filter(p=>p.skinTypes.includes(skinType)||p.skinTypes.includes('all')).slice(0,4);
+    cont.innerHTML=`<div class="quiz-result">
+      <div class="quiz-result-emoji">🎉</div>
+      <h2>Your Skin Profile</h2>
+      <div class="quiz-type-badge">${skinType.charAt(0).toUpperCase()+skinType.slice(1)} Skin</div>
+      <p style="color:var(--text2);margin-bottom:20px">Based on your answers, here's your personalized routine:</p>
+      <div class="quiz-routine">
+        <h4>Your Recommended Routine</h4>
+        ${routine.map((s,i)=>`<div class="routine-step"><div class="step-num">${i+1}</div>${s}</div>`).join('')}
+      </div>
+      <h3 style="font-size:16px;color:var(--text);margin-bottom:16px;text-align:left">Products We Recommend For You</h3>
+      <div class="products-grid" style="text-align:left">${recs.map((p,i)=>makeProductCard(p,i)).join('')}</div>
+      <button class="btn-secondary" style="margin-top:24px" onclick="quizStep=0;quizAnswers={};renderQuiz()">🔄 Retake Quiz</button>
+    </div>`;
+    return;
+  }
+  const q=QUIZ_QS[quizStep];
+  const prog=Math.round((quizStep/QUIZ_QS.length)*100);
+  cont.innerHTML=`
+    <div class="quiz-progress"><div class="quiz-bar" style="width:${prog}%"></div></div>
+    <p style="font-size:12px;color:var(--text3);margin-bottom:8px">Question ${quizStep+1} of ${QUIZ_QS.length}</p>
+    <p class="quiz-q">${q.q}</p>
+    <div class="quiz-options">${q.options.map(o=>`
+      <button class="quiz-option ${quizAnswers[quizStep]===o.v?'selected':''}" onclick="answerQuiz('${o.v}')">
+        <span class="quiz-emoji">${o.e}</span>
+        <span class="quiz-label">${o.label}</span>
+      </button>`).join('')}</div>
+    ${quizStep>0?`<button onclick="quizStep--;renderQuiz()" style="margin-top:16px;background:none;border:none;color:var(--pink);cursor:pointer;font-size:13px">← Back</button>`:''}`;
+}
+
+function answerQuiz(v){
+  quizAnswers[quizStep]=v;
+  quizStep++;
+  setTimeout(renderQuiz,200);
+}
+
+// CHATBOT
+const BOT_RESPONSES={
+  'oily':['Great question! For oily skin, look for:\n• Niacinamide 10% + Zinc serum to control sebum\n• Oil-free gel moisturizer\n• Salicylic acid cleanser\n• SPF 50+ PA++++\n\nI recommend starting with our Niacinamide serum!','For oily skin the key is balance — not stripping. Our Niacinamide + Zinc serum controls shine without drying. Try it paired with an oil-free moisturizer.'],
+  'acne':['For acne-prone skin:\n• Salicylic Acid BHA serum\n• Niacinamide to reduce inflammation\n• Light oil-free moisturizer\n• Non-comedogenic SPF\n\nConsistency is key — most actives take 6-8 weeks!','Acne responds well to salicylic acid (BHA) and niacinamide. Our Niacinamide 10% serum is a bestseller for this!'],
+  'dark spots':['For dark spots:\n• Vitamin C serum (15% for best results)\n• Alpha Arbutin\n• Niacinamide\n• SPF 50+ daily (crucial!)\n\nResults take 8-12 weeks of consistent use. Our Vitamin C serum is our top seller!','Always pair brightening actives with SPF — sun exposure makes dark spots worse. Try our Radiance Vitamin C Serum!'],
+  'dry':['For dry skin:\n• Hyaluronic Acid serum on damp skin\n• Rich ceramide moisturizer\n• Facial oil as a final step\n• Avoid harsh cleansers\n\nLayering is key — humectants first, then emollients!','Our Hyaluronic Acid Deep Hydration Serum is perfect for dry skin. It uses 3 molecular weights to hydrate all skin layers.'],
+  'sensitive':['For sensitive skin:\n• Centella Asiatica (Cica) cream\n• Ceramide moisturizer\n• Fragrance-free everything\n• Mineral SPF only\n• Patch test all products!\n\nIntroduce one product at a time.','Sensitive skin needs a "less is more" approach. Our Ceramide Barrier Repair Moisturizer is dermatologist-recommended for reactive skin.'],
+  'routine':['A great basic routine:\n🌅 Morning: Cleanser → Serum → Moisturizer → SPF\n🌙 Evening: Cleanser → Active serum → Moisturizer\n\nStart simple, then add actives one at a time!','Building a routine? Start with the basics: cleanser, moisturizer, SPF. Add actives (like Vitamin C or Retinol) after 2 weeks.'],
+  'hi':["Hi gorgeous! 🌸 I'm your GlowAI Beauty Assistant. Ask me about:\n• Your skin type\n• Product recommendations\n• Skincare routines\n• Specific concerns like acne or dark spots\n\nWhat's on your mind?"],
+  'hello':["Hello! Welcome to GlowAI 🌸 I'm here to help you find the perfect skincare for your unique skin. What skin concerns can I help you address today?"],
+  'retinol':['Retinol tips:\n• Start with 0.025-0.1% for beginners\n• PM only — always use SPF the next morning\n• Begin 2x per week, increase slowly\n• Always follow with moisturizer\n• Avoid mixing with AHA/BHA on same night\n\nOur Retinol 0.5% Night Serum is great for beginners!'],
+  'spf':['SPF is the #1 anti-aging product!\n• SPF 30 minimum daily\n• SPF 50+ recommended\n• Reapply every 2 hours outdoors\n• Use 1/4 teaspoon for face\n\nOur SPF 50+ PA++++ Sun Fluid has zero white cast — great for Indian skin tones!'],
+  'default':["Great question! I'd love to help. Could you tell me more about your:\n• Skin type (oily/dry/combination/sensitive)\n• Main concern (acne/dark spots/aging/dryness)\n\nThen I can give you personalized recommendations! 🌸","I'm here to help you glow! Tell me about your skin type or concerns and I'll suggest the perfect products from our collection. 🌸"],
+};
+
+function getBotResponse(msg){
+  const m=msg.toLowerCase();
+  if(m.includes('hi ')||m===('hi')||m.includes('hello')||m.includes('hey'))return BOT_RESPONSES['hi'][0];
+  if(m.includes('oily'))return BOT_RESPONSES['oily'][Math.floor(Math.random()*BOT_RESPONSES['oily'].length)];
+  if(m.includes('acne')||m.includes('pimple')||m.includes('breakout'))return BOT_RESPONSES['acne'][Math.floor(Math.random()*BOT_RESPONSES['acne'].length)];
+  if(m.includes('dark spot')||m.includes('pigment')||m.includes('hyperpig'))return BOT_RESPONSES['dark spots'][Math.floor(Math.random()*BOT_RESPONSES['dark spots'].length)];
+  if(m.includes('dry')||m.includes('dehydrat'))return BOT_RESPONSES['dry'][Math.floor(Math.random()*BOT_RESPONSES['dry'].length)];
+  if(m.includes('sensitiv')||m.includes('redness')||m.includes('irritat'))return BOT_RESPONSES['sensitive'][Math.floor(Math.random()*BOT_RESPONSES['sensitive'].length)];
+  if(m.includes('routine')||m.includes('how to')||m.includes('steps'))return BOT_RESPONSES['routine'][Math.floor(Math.random()*BOT_RESPONSES['routine'].length)];
+  if(m.includes('retinol'))return BOT_RESPONSES['retinol'][0];
+  if(m.includes('spf')||m.includes('sunscreen')||m.includes('sun'))return BOT_RESPONSES['spf'][0];
+  return BOT_RESPONSES['default'][Math.floor(Math.random()*BOT_RESPONSES['default'].length)];
+}
+
+function addMsg(text,role){
+  const cm=document.getElementById('chat-messages');
+  const m=document.createElement('div');
+  m.className='msg '+role;
+  m.textContent=text;
+  cm.appendChild(m);
+  cm.scrollTop=cm.scrollHeight;
+}
+
+function sendChat(){
+  const inp=document.getElementById('chat-input');
+  const msg=inp.value.trim();
+  if(!msg)return;
+  inp.value='';
+  document.getElementById('chat-suggestions').innerHTML='';
+  addMsg(msg,'user');
+  setTimeout(()=>{
+    const resp=getBotResponse(msg);
+    addMsg(resp,'bot');
+  },600);
+}
+
+function toggleChat(){
+  chatOpen=!chatOpen;
+  const w=document.getElementById('chatbot-window');
+  const b=document.getElementById('chatbot-btn');
+  w.classList.toggle('hidden',!chatOpen);
+  b.textContent=chatOpen?'✕':'✨';
+  if(chatOpen){
+    const cm=document.getElementById('chat-messages');
+    if(!cm.children.length){
+      addMsg("Hi gorgeous! 🌸 I'm your GlowAI Beauty Assistant. Ask me about skincare routines, product recommendations, or your skin concerns!",'bot');
+      const sugs=document.getElementById('chat-suggestions');
+      ['Oily skin products?','Help with dark spots','Sensitive skin routine','Best vitamin C serum'].forEach(s=>{
+        const btn=document.createElement('button');
+        btn.className='chat-sug';btn.textContent=s;
+        btn.onclick=()=>{document.getElementById('chat-input').value=s;sendChat();};
+        sugs.appendChild(btn);
+      });
+    }
+    setTimeout(()=>document.getElementById('chat-input').focus(),100);
+  }
+}
+
+initHome();
+renderQuiz();
+</script>
